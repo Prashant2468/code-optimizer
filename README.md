@@ -101,10 +101,9 @@ Start both the frontend and backend servers with one command:
   - ⚠️ **Performance bottlenecks and optimization suggestions**
 
 ## 📌 Sneak Peek of Main Page 🙈 :
-![mockup720](https://github.com/Prashant2468/Portfolio/blob/main/assest/images/portfolio1.png)
-![ss](https://github.com/Prashant2468/Portfolio/blob/main/assest/images/portfolio2.png)
-![ss](https://github.com/Prashant2468/Portfolio/blob/main/assest/images/portfolio3.png)
-![ss](https://github.com/Prashant2468/Portfolio/blob/main/assest/images/portfolio4.png)
+
+![ss](https://github.com/Prashant2468/code-optimizer/blob/main/client/src/assets/optimizer2.png)
+![ss](https://github.com/Prashant2468/code-optimizer/blob/main/client/src/assets/optimizer1.png)
 
 
 <h2>📬 Contact</h2>
