@@ -212,7 +212,7 @@ function App() {
               {loading ? 'Analyzing...' : 'Analyze Code'}
             </button>
           </div>
-          <div className="flex-1 min-h-[50vh] sm:min-h-[60vh] lg:min-h-[70vh] relative">
+          <div className="flex-1 h-[70vh] md:h-[60vh] lg:h-[70vh]" ref={containerRef}>
             <Editor
               height="100%"
               language={language}
@@ -221,7 +221,7 @@ function App() {
               onChange={handleEditorChange}
               options={{
                 minimap: { enabled: false },
-                fontSize: 14,
+                fontSize: 16,
                 lineNumbers: 'on',
                 roundedSelection: false,
                 scrollBeyondLastLine: false,
@@ -230,13 +230,22 @@ function App() {
                 wordWrap: 'on',
                 scrollbar: {
                   useShadows: false,
-                  verticalHasArrows: false,
-                  horizontalHasArrows: false,
+                  verticalHasArrows: true,
+                  horizontalHasArrows: true,
                   vertical: 'visible',
                   horizontal: 'visible',
-                  verticalScrollbarSize: 10,
-                  horizontalScrollbarSize: 10
-                }
+                  verticalScrollbarSize: 16,
+                  horizontalScrollbarSize: 16
+                },
+                touchbar: {
+                  scrollSensitivity: 1
+                },
+                overviewRulerLanes: 0,
+                lineDecorationsWidth: 0,
+                renderLineHighlight: 'none',
+                fixedOverflowWidgets: true,
+                mouseWheelZoom: true,
+                dragAndDrop: true
               }}
             />
           </div>
