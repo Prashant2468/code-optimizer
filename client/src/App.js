@@ -166,7 +166,7 @@ function App() {
 
       <header className="border-b border-gray-200 dark:border-gray-700">
         <div className="container mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-y-2">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
             Code Complexity Analyzer
           </h1>
           <div className="flex items-center gap-4">
@@ -212,7 +212,7 @@ function App() {
               {loading ? 'Analyzing...' : 'Analyze Code'}
             </button>
           </div>
-          <div className="flex-1 min-h-[400px]">
+          <div className="flex-1 min-h-[50vh] sm:min-h-[60vh] lg:min-h-[70vh] relative">
             <Editor
               height="100%"
               language={language}
@@ -244,7 +244,7 @@ function App() {
 
         <div className="w-full lg:w-1/2 overflow-auto">
           {analysis ? (
-            <div className="p-6 space-y-6">
+            <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}>
                   <h3 className="text-lg font-semibold mb-2">Time Complexity</h3>
@@ -275,7 +275,7 @@ function App() {
               )}
 
               {analysis.optimizedCode && (
-                <div className={`p-6 mt-6 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}>
+                <div className={`p-4 sm:p-6 mt-4 sm:mt-6 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}>
                   <h3 className="text-lg font-semibold mb-2">Optimized Code</h3>
                   <pre className={`whitespace-pre-wrap break-words font-mono text-sm ${darkMode ? 'text-green-400' : 'text-green-700'}`}>
                     {analysis.optimizedCode}
@@ -284,7 +284,7 @@ function App() {
               )}
             </div>
           ) : (
-            <div className="h-full flex items-center justify-center p-6">
+            <div className="h-full flex items-center justify-center p-4 sm:p-6">
               <p className={`text-lg ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                 Run analysis to see results here
               </p>
