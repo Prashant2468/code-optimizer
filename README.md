@@ -100,6 +100,13 @@ Start both the frontend and backend servers with one command:
   - 📦 **Space Complexity**
   - ⚠️ **Performance bottlenecks and optimization suggestions**
 
+## 📌 Sneak Peek of Main Page 🙈 :
+![mockup720](https://github.com/Prashant2468/Portfolio/blob/main/assest/images/portfolio1.png)
+![ss](https://github.com/Prashant2468/Portfolio/blob/main/assest/images/portfolio2.png)
+![ss](https://github.com/Prashant2468/Portfolio/blob/main/assest/images/portfolio3.png)
+![ss](https://github.com/Prashant2468/Portfolio/blob/main/assest/images/portfolio4.png)
+
+
 <h2>📬 Contact</h2>
 
 Feel free to reach me through the below handles if you'd like to contact me.
