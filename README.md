@@ -1,59 +1,103 @@
 # Code Complexity Analyzer
 
-A web application that analyzes code complexity for Java, C++, and Python code.
+A modern web-based tool that analyzes **time and space complexity** for code written in **Java**, **C++**, and **Python**. It helps developers, students, and interviewers understand how efficient their code is — instantly.
 
-## Features
+---
 
-- Code input with syntax highlighting
-- Support for Java, C++, and Python
-- Real-time complexity analysis
-- Dark/Light mode toggle
-- Responsive design
+## 🚀 Features
 
-## Prerequisites
+- 🔤 Multi-language support: Java, C++, Python
+- 🧠 Real-time time & space complexity analysis
+- 📋 Big O notation with explanations
+- 💡 Optimization suggestions powered by AI
+- 🧑‍💻 Monaco Editor with syntax highlighting
+- 🌙 Light/Dark theme toggle
+- 📱 Fully responsive on all devices
 
-- Node.js (v14 or higher)
-- npm (v6 or higher)
+---
 
-## Installation
+## 📚 Use Cases
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm run install-all
-   ```
+- 👨‍🎓 Learning algorithm complexity in real-time
+- 👩‍💻 Code performance tuning for developers
+- 👨‍🏫 Teaching Big O concepts visually
+- 🧑‍⚖️ Code review and technical interviews
 
-## Running the Application
+---
 
-1. Start both frontend and backend:
-   ```bash
-   npm start
-   ```
+## 🛠️ Technologies Used
 
-2. The application will be available at:
-   - Frontend: http://localhost:3000
-   - Backend: http://localhost:5000
+### Frontend:
+- React.js
+- Monaco Editor
+- Tailwind CSS
+- Axios
 
-## Usage
+### Backend:
+- Node.js
+- Express.js
 
-1. Select your programming language from the dropdown
-2. Paste your code in the editor
-3. Click "Analyze Code" to get complexity analysis
-4. View the results in the right panel
+### Hosting:
+- Frontend: [Vercel](https://vercel.com)
+- Backend: [Render](https://render.com)
 
-## Technologies Used
+---
 
-- Frontend:
-  - React.js
-  - Monaco Editor
-  - Tailwind CSS
-  - Axios
+## 🧰 Prerequisites
 
-- Backend:
-  - Node.js
-  - Express.js
-  - Code parsing libraries
+Before you begin, make sure you have the following installed:
 
-## Note
+- Node.js (version 14 or higher)
+- npm (version 6 or higher)
 
-This is a simplified version of code complexity analysis. The actual complexity might vary based on the specific implementation details of your code. 
+To check versions:
+```bash
+node -v
+npm -v
+```
+
+## ⚙️ Installation
+
+Follow these steps to set up the project locally:
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/your-username/code-complexity-analyzer.git
+cd code-complexity-analyzer
+```
+
+### 2.  Install All Dependencies
+```bash
+npm run install-all
+```
+
+## 🧪 How to Use
+
+1. Open the application in your browser:
+```text
+http://localhost:3000
+```
+## 🚦 Running the Application
+
+```bash
+npm start
+```
+Start both the frontend and backend servers with one command:
+
+## 🧪 How to Use
+
+- Select your programming language from the dropdown:
+  - Java
+  - C++
+  - Python
+
+- Paste your code into the Monaco Editor.
+
+- Click the **"Analyze Code"** button.
+
+- You will see:
+  - 📈 **Time Complexity**
+  - 📦 **Space Complexity**
+  - ⚠️ **Performance bottlenecks and optimization suggestions**
+
+
