@@ -212,7 +212,7 @@ function App() {
               {loading ? 'Analyzing...' : 'Analyze Code'}
             </button>
           </div>
-          <div style={{ height: '400px' }} className="w-full" ref={containerRef}>
+          <div style={{ height: '400px' }} className="w-full overflow-x-auto" ref={containerRef}>
             <Editor
               height="400px"
               language={language}
@@ -227,7 +227,7 @@ function App() {
                 scrollBeyondLastLine: false,
                 automaticLayout: true,
                 padding: { top: 8, bottom: 8 },
-                wordWrap: 'on',
+                wordWrap: 'off',
                 scrollbar: {
                   useShadows: false,
                   verticalHasArrows: true,
@@ -235,7 +235,8 @@ function App() {
                   vertical: 'visible',
                   horizontal: 'visible',
                   verticalScrollbarSize: 16,
-                  horizontalScrollbarSize: 16
+                  horizontalScrollbarSize: 16,
+                  alwaysConsumeMouseWheel: false
                 },
                 touchbar: {
                   scrollSensitivity: 1
@@ -248,7 +249,13 @@ function App() {
                 dragAndDrop: true,
                 contextmenu: true,
                 quickSuggestions: false,
-                folding: false
+                folding: false,
+                horizontalScrollbarVisibility: 'visible',
+                scrollBeyondLastColumn: 5,
+                renderWhitespace: 'none',
+                smoothScrolling: true,
+                fastScrollSensitivity: 5,
+                overviewRulerBorder: false
               }}
             />
           </div>
