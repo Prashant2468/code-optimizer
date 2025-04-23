@@ -18,7 +18,17 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-app.use(cors());
+// Configure CORS
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://your-vercel-app-url.vercel.app',
+    'https://*.vercel.app'  // Allow all Vercel deployments
+  ],
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
+
 app.use(bodyParser.json());
 
 // Test endpoint

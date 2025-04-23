@@ -4,6 +4,9 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+// Get server URL from environment variable or use localhost for development
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || 'http://localhost:5001';
+
 // Improved error handling for ResizeObserver
 const handleResizeObserverError = (error) => {
   // Ignore ResizeObserver loop limit exceeded errors
@@ -123,8 +126,11 @@ function App() {
 
     setLoading(true);
     try {
-      await axios.get('http://localhost:5001/test');
-      const response = await axios.post('http://localhost:5001/analyze', {
+      // Test server connection
+      await axios.get(`${SERVER_URL}/test`);
+      
+      // Send analysis request
+      const response = await axios.post(`${SERVER_URL}/analyze`, {
         code,
         language
       });
@@ -142,7 +148,7 @@ function App() {
       if (error.response) {
         errorMessage = error.response.data.details || error.response.data.error || errorMessage;
       } else if (error.request) {
-        errorMessage = 'Server is not responding. Please check if the server is running.';
+        errorMessage = 'Server is not responding. Please try again later.';
       }
 
       toast.error(errorMessage);
