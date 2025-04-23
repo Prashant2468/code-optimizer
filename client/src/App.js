@@ -212,9 +212,9 @@ function App() {
               {loading ? 'Analyzing...' : 'Analyze Code'}
             </button>
           </div>
-          <div className="flex-1 h-[70vh] md:h-[60vh] lg:h-[70vh]" ref={containerRef}>
+          <div style={{ height: '400px' }} className="w-full" ref={containerRef}>
             <Editor
-              height="100%"
+              height="400px"
               language={language}
               theme={darkMode ? 'vs-dark' : 'light'}
               value={code}
@@ -226,7 +226,7 @@ function App() {
                 roundedSelection: false,
                 scrollBeyondLastLine: false,
                 automaticLayout: true,
-                padding: { top: 16, bottom: 16 },
+                padding: { top: 8, bottom: 8 },
                 wordWrap: 'on',
                 scrollbar: {
                   useShadows: false,
@@ -241,11 +241,14 @@ function App() {
                   scrollSensitivity: 1
                 },
                 overviewRulerLanes: 0,
-                lineDecorationsWidth: 0,
+                lineDecorationsWidth: 24,
                 renderLineHighlight: 'none',
                 fixedOverflowWidgets: true,
                 mouseWheelZoom: true,
-                dragAndDrop: true
+                dragAndDrop: true,
+                contextmenu: true,
+                quickSuggestions: false,
+                folding: false
               }}
             />
           </div>
