@@ -1,8 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+// Improved error handling for ResizeObserver
+const handleResizeObserverError = (error) => {
+  // Ignore ResizeObserver loop limit exceeded errors
+  if (error.message && error.message.includes('ResizeObserver')) {
+    return;
+  }
+  console.error('ResizeObserver error:', error);
+};
+
+// Improved debounce function with leading edge
+const debounce = (func, wait) => {
+  let timeout;
+  let leading = true;
+  return function executedFunction(...args) {
+    const later = () => {
+      timeout = null;
+      if (!leading) func(...args);
+    };
+    const callNow = leading && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func(...args);
+  };
+};
 
 function App() {
   const [code, setCode] = useState('');
@@ -13,11 +38,51 @@ function App() {
     const savedMode = localStorage.getItem('darkMode');
     return savedMode ? JSON.parse(savedMode) : false;
   });
+  const editorRef = useRef(null);
+  const containerRef = useRef(null);
+
+  // Improved resize handler with better debouncing
+  const handleResize = useCallback(
+    debounce(() => {
+      if (editorRef.current && containerRef.current) {
+        try {
+          const container = containerRef.current;
+          const width = container.clientWidth;
+          const height = container.clientHeight;
+          
+          editorRef.current.layout({
+            width,
+            height
+          });
+        } catch (error) {
+          handleResizeObserverError(error);
+        }
+      }
+    }, 100),
+    []
+  );
 
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
     document.documentElement.classList.toggle('dark', darkMode);
-  }, [darkMode]);
+
+    // Add resize observer instead of window resize event
+    const resizeObserver = new ResizeObserver(handleResize);
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        resizeObserver.unobserve(containerRef.current);
+      }
+      resizeObserver.disconnect();
+    };
+  }, [darkMode, handleResize]);
+
+  const handleEditorChange = (value) => {
+    setCode(value || '');
+  };
 
   const validateCodeLanguage = (code, selectedLanguage) => {
     const languagePatterns = {
@@ -147,7 +212,7 @@ function App() {
               language={language}
               theme={darkMode ? 'vs-dark' : 'light'}
               value={code}
-              onChange={setCode}
+              onChange={handleEditorChange}
               options={{
                 minimap: { enabled: false },
                 fontSize: 14,
@@ -157,6 +222,15 @@ function App() {
                 automaticLayout: true,
                 padding: { top: 16, bottom: 16 },
                 wordWrap: 'on',
+                scrollbar: {
+                  useShadows: false,
+                  verticalHasArrows: false,
+                  horizontalHasArrows: false,
+                  vertical: 'visible',
+                  horizontal: 'visible',
+                  verticalScrollbarSize: 10,
+                  horizontalScrollbarSize: 10
+                }
               }}
             />
           </div>

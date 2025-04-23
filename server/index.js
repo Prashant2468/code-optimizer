@@ -33,87 +33,160 @@ function analyzeTimeComplexity(code, language) {
   let maxNestedLevel = 0;
   let currentNestedLevel = 0;
   let hasRecursion = false;
+  let hasOnlyIO = true;
+
+  // List of IO operations that should be considered O(1)
+  const ioOperations = [
+    'System.out',
+    'Scanner',
+    'scanner',
+    'nextInt',
+    'nextLine',
+    'nextDouble',
+    'nextFloat',
+    'nextLong',
+    'nextShort',
+    'nextByte',
+    'print',
+    'println',
+    'printf',
+    'close'
+  ];
+
+  // List of operations that indicate non-constant time
+  const nonConstantOperations = [
+    'for',
+    'while',
+    'do',
+    'forEach',
+    'map',
+    'filter',
+    'reduce',
+    'sort',
+    'Collections.sort',
+    'Arrays.sort'
+  ];
 
   for (const line of lines) {
-    // Check for recursion
-    if (line.includes('return') && line.includes('(') && line.includes(')')) {
-      hasRecursion = true;
+    const trimmedLine = line.trim();
+    
+    // Skip empty lines and comments
+    if (trimmedLine === '' || trimmedLine.startsWith('//') || trimmedLine.startsWith('/*')) {
+      continue;
     }
 
-    // Check for nested loops
-    if (line.includes('for') || line.includes('while')) {
-      currentNestedLevel++;
-      maxNestedLevel = Math.max(maxNestedLevel, currentNestedLevel);
-    } else if (line.includes('}')) {
+    // Check for non-constant time operations
+    if (nonConstantOperations.some(op => trimmedLine.includes(op))) {
+      hasOnlyIO = false;
+      if (trimmedLine.includes('for') || trimmedLine.includes('while')) {
+        currentNestedLevel++;
+        maxNestedLevel = Math.max(maxNestedLevel, currentNestedLevel);
+      }
+    } else if (trimmedLine.includes('}')) {
       currentNestedLevel = Math.max(0, currentNestedLevel - 1);
     }
+
+    // Check for recursion
+    if (trimmedLine.includes('return') && 
+        trimmedLine.includes('(') && 
+        trimmedLine.includes(')') &&
+        !ioOperations.some(op => trimmedLine.includes(op))) {
+      hasRecursion = true;
+      hasOnlyIO = false;
+    }
+
+    // Check if line contains any non-IO operations
+    if (!ioOperations.some(op => trimmedLine.includes(op)) &&
+        !trimmedLine.includes('import') &&
+        !trimmedLine.includes('public') &&
+        !trimmedLine.includes('class') &&
+        !trimmedLine.includes('private') &&
+        !trimmedLine.includes('static') &&
+        !trimmedLine.includes('void') &&
+        !trimmedLine.includes('int') &&
+        !trimmedLine.includes('String') &&
+        !trimmedLine.includes('{') &&
+        !trimmedLine.includes('}')) {
+      hasOnlyIO = false;
+    }
   }
 
-  // Attach hasRecursion to function for external use
-  analyzeTimeComplexity.hasRecursion = hasRecursion;
-
-  // Determine complexity based on nested loops and recursion
-  if (hasRecursion) {
-    complexity = 'O(2^n)'; // Exponential for recursion
-  } else if (maxNestedLevel === 2) {
-    complexity = 'O(n²)';
-  } else if (maxNestedLevel === 1) {
-    complexity = 'O(n)';
+  // If the code only contains IO operations and declarations, it's O(1)
+  if (hasOnlyIO && maxNestedLevel === 0 && !hasRecursion) {
+    complexity = 'O(1)';
+  } else {
+    complexity = hasRecursion ? 'O(2^n)' : 
+                maxNestedLevel === 2 ? 'O(n²)' :
+                maxNestedLevel === 1 ? 'O(n)' : 'O(1)';
   }
 
-  return complexity;
+  return {
+    complexity,
+    hasRecursion
+  };
 }
 
 function analyzeSpaceComplexity(code, language) {
   const lines = code.split('\n');
-  let complexity = 'O(1)';
   let hasArray = false;
   let hasDynamicAllocation = false;
   let hasRecursion = false;
-  let hasStackUsage = false;
+  let hasInputOutput = false;
 
-  // Check for recursion first
   for (const line of lines) {
-    if (line.includes('return') && line.includes('(') && line.includes(')')) {
+    const trimmedLine = line.trim();
+    
+    // Check for input/output operations
+    if (trimmedLine.includes('System.out') || 
+        trimmedLine.includes('Scanner') || 
+        trimmedLine.includes('scanner')) {
+      hasInputOutput = true;
+      continue; // Skip further analysis for this line
+    }
+
+    // Check for recursion
+    if (trimmedLine.includes('return') && 
+        trimmedLine.includes('(') && 
+        trimmedLine.includes(')')) {
       hasRecursion = true;
       break;
     }
   }
 
-  // Attach hasRecursion to function for external use
-  analyzeSpaceComplexity.hasRecursion = hasRecursion;
+  // If there are only input/output operations and no arrays/recursion, complexity is O(1)
+  if (hasInputOutput && !hasArray && !hasRecursion) {
+    return {
+      complexity: 'O(1)',
+      hasRecursion
+    };
+  }
 
   // If no recursion, check for data structures
   if (!hasRecursion) {
     for (const line of lines) {
+      const trimmedLine = line.trim();
       // Check for array declarations
-      if (line.includes('[]') || line.includes('ArrayList') || line.includes('List')) {
+      if (trimmedLine.includes('[]') || 
+          trimmedLine.includes('ArrayList') || 
+          trimmedLine.includes('List') ||
+          trimmedLine.includes('array')) {
         hasArray = true;
       }
       
-      // Check for dynamic memory allocation
-      if (line.includes('new') || line.includes('malloc')) {
+      // Check for dynamic memory allocation (excluding Scanner)
+      if ((trimmedLine.includes('new') || 
+          trimmedLine.includes('malloc')) &&
+          !trimmedLine.includes('Scanner')) {
         hasDynamicAllocation = true;
       }
-
-      // Check for stack usage in recursion
-      if (line.includes('return') && line.includes('(') && line.includes(')')) {
-        hasStackUsage = true;
-      }
     }
   }
 
-  // Determine space complexity
-  if (hasRecursion || hasStackUsage) {
-    complexity = 'O(n)'; // Recursion uses stack space
-  } else if (hasArray || hasDynamicAllocation) {
-    // Only count array allocations that are not temporary
-    if (lines.some(line => line.includes('new') && !line.includes('System.out'))) {
-      complexity = 'O(n)';
-    }
-  }
-
-  return complexity;
+  return {
+    complexity: (hasRecursion) ? 'O(n)' :
+               (hasArray || hasDynamicAllocation) ? 'O(n)' : 'O(1)',
+    hasRecursion
+  };
 }
 
 async function getAIAnalysis(code, language) {
@@ -164,8 +237,8 @@ app.post('/analyze', async (req, res) => {
   
   try {
     console.log('Starting analysis for language:', language);
-    const timeComplexity = analyzeTimeComplexity(code, language);
-    const spaceComplexity = analyzeSpaceComplexity(code, language);
+    const timeAnalysis = analyzeTimeComplexity(code, language);
+    const spaceAnalysis = analyzeSpaceComplexity(code, language);
     
     console.log('Getting AI analysis...');
     let aiAnalysis = null;
@@ -214,20 +287,20 @@ app.post('/analyze', async (req, res) => {
       // Continue with the analysis even if AI fails
     }
     
-    let explanation = `The code has a time complexity of ${timeComplexity} and space complexity of ${spaceComplexity}. `;
+    let explanation = `The code has a time complexity of ${timeAnalysis.complexity} and space complexity of ${spaceAnalysis.complexity}. `;
     
-    if (timeComplexity === 'O(n)') {
+    if (timeAnalysis.complexity === 'O(n)') {
       explanation += 'The time complexity is linear because there is a single loop iterating through the input. ';
-    } else if (timeComplexity === 'O(n²)') {
+    } else if (timeAnalysis.complexity === 'O(n²)') {
       explanation += 'The time complexity is quadratic because there are nested loops. ';
-    } else if (timeComplexity === 'O(2^n)') {
+    } else if (timeAnalysis.complexity === 'O(2^n)') {
       explanation += 'The time complexity is exponential due to recursive calls. ';
     }
     
-    if (spaceComplexity === 'O(1)') {
+    if (spaceAnalysis.complexity === 'O(1)') {
       explanation += 'The space complexity is constant as no additional data structures are used and the memory usage does not grow with input size. ';
-    } else if (spaceComplexity === 'O(n)') {
-      if (hasRecursion) {
+    } else if (spaceAnalysis.complexity === 'O(n)') {
+      if (spaceAnalysis.hasRecursion) {
         explanation += 'The space complexity is linear due to the recursive calls using stack space. ';
       } else {
         explanation += 'The space complexity is linear due to the use of arrays or dynamic memory allocation that grows with input size. ';
@@ -236,8 +309,8 @@ app.post('/analyze', async (req, res) => {
     
     console.log('Analysis completed successfully');
     res.json({
-      timeComplexity,
-      spaceComplexity,
+      timeComplexity: timeAnalysis.complexity,
+      spaceComplexity: spaceAnalysis.complexity,
       explanation,
       aiAnalysis,
       optimizedCode
