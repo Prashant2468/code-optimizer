@@ -62,8 +62,7 @@ Follow these steps to set up the project locally:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/code-complexity-analyzer.git
-cd code-complexity-analyzer
+git clone https://github.com/Prashant2468/code-optimizer.git
 ```
 
 ### 2.  Install All Dependencies
